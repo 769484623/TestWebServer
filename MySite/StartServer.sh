@@ -1,8 +1,11 @@
 #!/bin/bash
 
+export ALLOWED_HOSTS="localhost,*"
+
+
 if [[ $# > 0 && "$1" == "DEBUG" ]];then
     export DEBUG=on
-    echo "Developing Mode."
+    echo "Enter Developing Mode."
     ./manage.py runserver 0.0.0.0:80
 else
     echo "Server is Online."
