@@ -1,7 +1,5 @@
 #!/bin/bash
-
-export ALLOWED_HOSTS="localhost,*"
-
+export ALLOWED_HOSTS="*"
 
 if [[ $# > 0 && "$1" == "DEBUG" ]];then
     export DEBUG=on
