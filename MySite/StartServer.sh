@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $# > 1 && "$1" == "DEBUG" ];then
+if [[ $# > 0 && "$1" == "DEBUG" ]];then
     echo "Developing Mode."
     ./manage.py runserver 0.0.0.0:80
 else
