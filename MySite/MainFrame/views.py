@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 # Create your views here.
 
 def index(request):
-    return HttpResponse("This is The MainFrame.");
+    content = {'context': 'This is the Main Page.'}
+    return render(request, '/home/lnstar/PycharmProjects/TestWebServer/MySite/MainFrame/templates/index.html', content)
