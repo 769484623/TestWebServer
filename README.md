@@ -3,6 +3,7 @@
 
 
 架构：Nginx + Gunicorn + Django（MySQL）
+
 在Nanopi-Neo上测试用网站。
 以后会使用Nanopi2 fire做单独的Nginx 负载均衡服务器
 已知问题：
