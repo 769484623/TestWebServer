@@ -31,7 +31,7 @@ class LoginDialog extends Component {
             if(this.state.userPassWD.length >= 6)
             {
                 const timeStamp = new Date().getTime();//Get Timestamp
-                axios.post('/Authentication',{userName:this.state.usrName,userPassWD:this.state.userPassWD,currentTime:timeStamp});
+                axios.post('/Auth',{userName:this.state.usrName,userPassWD:this.state.userPassWD,currentTime:timeStamp});
             }
             else{}//Passwd is too short.
         }
