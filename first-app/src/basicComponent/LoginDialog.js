@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Button, FormGroup, FormControl} from 'react-bootstrap';
 import axios from 'axios';
+import Toast from './Toast'
+
 
 class LoginDialog extends Component {
     constructor(props) {
@@ -9,7 +11,7 @@ class LoginDialog extends Component {
         this.loginButtonOnClick = this.loginButtonOnClick.bind(this);
         this.usrNameOnChange = this.usrNameOnChange.bind(this);
         this.usrPassWDOnChange = this.usrPassWDOnChange.bind(this);
-        this.state = {Name: '登录网站', args: 0}
+        this.state = {Name: '登录网站', args: 0};
     }
     usrNameOnChange(usrName) {
         if (usrName.target.value) {
@@ -51,9 +53,25 @@ class LoginDialog extends Component {
                     });
             }
             else {
+                const toast = new Toast(
+                    {
+                        yCoordinate: 0.4,
+                        dialogString: 'Password need to be longer than 6 characters!',
+                        timeout: 3000
+                    }
+                );
+                toast.toast();
             }//Passwd is too short.
         }
         else {
+            const toast = new Toast(
+                {
+                    yCoordinate: 0.4,
+                    dialogString: 'User Name and Password cannot be Null!',
+                    timeout: 3000
+                }
+            );
+            toast.toast();
         }//usrname and passwd can not be null
     }
 
