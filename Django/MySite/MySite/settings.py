@@ -27,12 +27,12 @@ DEBUG = os.environ.get('DEBUG','off') == 'on'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS','localhost').split(',')
 
-
 # Application definition
+CSRF_COOKIE_NAME = "XCSRF-TOKEN"
 
 INSTALLED_APPS = [
     'gunicorn',
-    'MainFrame',
+    'LoginAuth',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,7 +44,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -121,6 +121,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/MainFrame/static/'
+STATIC_URL = '/LoginAuth/static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'MainFrame/static/img/')
+MEDIA_ROOT = os.path.join(BASE_DIR,'LoginAuth/static/img/')

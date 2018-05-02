@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Button,FormGroup,FormControl} from 'react-bootstrap';
+import {Button, FormGroup, FormControl} from 'react-bootstrap';
 import axios from 'axios';
-
 
 class LoginDialog extends Component {
     constructor(props) {
@@ -10,33 +9,54 @@ class LoginDialog extends Component {
         this.loginButtonOnClick = this.loginButtonOnClick.bind(this);
         this.usrNameOnChange = this.usrNameOnChange.bind(this);
         this.usrPassWDOnChange = this.usrPassWDOnChange.bind(this);
-        this.state = {Name:'登录网站',args:0}
+        this.state = {Name: '登录网站', args: 0}
     }
-    usrNameOnChange(usrName){
-        if(usrName.target.value){
+    usrNameOnChange(usrName) {
+        if (usrName.target.value) {
             this.setState({
-                usrName:usrName.target.value,
+                usrName: usrName.target.value,
             });
         }
     }
-    usrPassWDOnChange(usrPassWD){
-        if(usrPassWD.target.value){
+
+    usrPassWDOnChange(usrPassWD) {
+        if (usrPassWD.target.value) {
             this.setState({
-                userPassWD:usrPassWD.target.value,
+                userPassWD: usrPassWD.target.value,
             });
         }
     }
+
     loginButtonOnClick() {
-        if(this.state.usrName && this.state.userPassWD){
-            if(this.state.userPassWD.length >= 6)
-            {
+        if (this.state.usrName && this.state.userPassWD) {
+            if (this.state.userPassWD.length >= 6) {
                 const timeStamp = new Date().getTime();//Get Timestamp
-                axios.post('/Auth',{userName:this.state.usrName,userPassWD:this.state.userPassWD,currentTime:timeStamp});
+                axios.post('/Auth',
+                    {
+                        userName: this.state.usrName,
+                        userPassWD: this.state.userPassWD,
+                        currentTime: timeStamp
+                    },
+                    // {
+                    //     headers: {
+                    //         'X-CSRFToken': 'Test Cookies',
+                    //     }
+                    // }
+                    )
+                    .then((response) => {
+                        console.log(response);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             }
-            else{}//Passwd is too short.
+            else {
+            }//Passwd is too short.
         }
-        else{}//usrname and passwd can not be null
+        else {
+        }//usrname and passwd can not be null
     }
+
     render() {
         return (
             <div className='Login-Dialog'>
