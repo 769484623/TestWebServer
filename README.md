@@ -22,5 +22,5 @@
 - 已知问题：
   1. 实验服务器Nginx 用户为 root（不为默认的www-data），MySQL的django用户权限过大（update这个权限应该进一步限制在固定的表内，而不为全部的库权限）。
   2. SecretKey没有特别好的解决方法。
-  3. CSRF 问题没有得到解决。
-  4. 前后端分离，React无法获取Cookies（Nginx直接路由,而非Django生成）。
+  3. CSRF 问题没有得到解决。
+  4. 前后端分离，React无法获取Cookies（Nginx直接路由,而非Django生成）。
