@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import logo from './logo.svg';
+import logo from './logo2.png';
 import './App.css';
 
 export class MainTitle extends Component {
@@ -17,11 +17,14 @@ export class MainTitle extends Component {
     }
     render() {
         return (
-            <div className='App'>
+            <div>
                 <header className='App-header'>
-                    <img src={logo} className='App-logo' alt='Logo'>
-                    </img>
-                    <h1 className='App-title'>网站主页</h1>
+                    <table>
+                        <td>
+                            <img src={logo} className='App-logo' alt='Logo'>
+                            </img>
+                        </td>
+                    </table>
                 </header>
                 <p className='App-intro'>
                     <br/>当前时间：{this.state.currentTime}

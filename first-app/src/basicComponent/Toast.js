@@ -14,24 +14,32 @@ export default class Toast extends Component {
         const topPercent = ((this.state.yCoordinate > 1 ? 0 : this.state.yCoordinate) * 100).toString() + '%';
         this.toast = this.toast.bind(this);
         this.componentDismiss = this.componentDismiss.bind(this);
-        this.toastStyle =
+        this.toastBoardStyle =
             {
+                'borderRadius':'20px',
+                'backgroundColor':'gray',
                 'textAlign': 'center',
                 'position': 'fixed',
-                'backgroundColor': 'white',
                 'top': topPercent,
                 'left': '0px',
                 'right': '0px',
-                'width': '40%',
-                'height': '20%',
+                'width': '350px',
+                'height': '60px',
                 'margin': 'auto'
             };
+        this.floaterToastStyle = {
+            'position': 'relative',
+            'top':'30%',
+            'margin': 'auto'
+        };
     }
 
     render() {
         return (
-            <div style={this.toastStyle}>
-                {this.state.dialogString}
+            <div style={this.toastBoardStyle}>
+                <div style={this.floaterToastStyle}>
+                    {this.state.dialogString}
+                </div>
             </div>
         );
     }
