@@ -8,7 +8,7 @@ export class MainTitle extends Component {
         super(props);
         this.timeUpdateCallBack = this.timeUpdateCallBack.bind(this);
         const time = new Date().toLocaleTimeString();
-        this.state = {currentTime:time}
+        this.state = {currentTime:time};
         setInterval(this.timeUpdateCallBack, 1000);
     }
 
