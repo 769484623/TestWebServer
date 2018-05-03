@@ -9,23 +9,21 @@ export class MainTitle extends Component {
         this.timeUpdateCallBack = this.timeUpdateCallBack.bind(this);
         const time = new Date().toLocaleTimeString();
         this.state = {currentTime:time}
-        setInterval(this.timeUpdateCallBack,1000);
+        setInterval(this.timeUpdateCallBack, 1000);
     }
-    timeUpdateCallBack(){
+
+    timeUpdateCallBack() {
         const time = new Date().toLocaleTimeString();
-        this.setState({currentTime:time});
+        this.setState({currentTime: time});
     }
+
     render() {
         return (
             <div>
-                <header className='App-header'>
-                    <table>
-                        <td>
-                            <img src={logo} className='App-logo' alt='Logo'>
-                            </img>
-                        </td>
-                    </table>
-                </header>
+                <div className='App-header'>
+                    <img src={logo} className='App-logo' alt='Logo'>
+                    </img>
+                </div>
                 <p className='App-intro'>
                     <br/>当前时间：{this.state.currentTime}
                 </p>
