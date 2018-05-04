@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Button, FormGroup, FormControl} from 'react-bootstrap';
 import axios from 'axios';
+import {Redirect} from 'react-router-dom'
+import logo from '../logo2.png'
 
 class LoginDialog extends Component {
     constructor(props) {
@@ -8,7 +10,7 @@ class LoginDialog extends Component {
         this.loginButtonOnClick = this.loginButtonOnClick.bind(this);
         this.usrNameOnChange = this.usrNameOnChange.bind(this);
         this.usrPassWDOnChange = this.usrPassWDOnChange.bind(this);
-        this.state = {Name: '登录网站', args: 0, warningTags: ''};
+        this.state = {Name: '登录', args: 0, warningTags: '',loginState:false};
     }
 
     usrNameOnChange(usrName) {
@@ -46,9 +48,16 @@ class LoginDialog extends Component {
                     )
                         .then((response) => {
                             console.log(response);
+                            this.setState({loginState:true});
                         })
                         .catch((err) => {
-                            this.setState({warningTags: '与服务器连接发生错误！错误码：' + err.response.status.toString()})
+                            try {
+                                this.setState({warningTags: '与服务器连接发生错误！错误码：' + err.response.status.toString()})
+                            }
+                            catch(e)
+                            {
+                                this.setState({warningTags: err.toString()})
+                            }
                         });
                 }
                 catch (e) {
@@ -65,15 +74,22 @@ class LoginDialog extends Component {
     }
 
     render() {
+        if(this.state.loginState)
+        {
+            return (
+                <Redirect to='/home'/>
+            );
+        }
         return (
             <div className='Login-Dialog'>
+                <img src={logo} alt='Logo'/>
                 <FormGroup className='formBasicText' role='form'>
+                    <br/>
                     <FormControl type='text' placeholder='用户名' onChange={this.usrNameOnChange}>
                     </FormControl>
                     <br/>
                     <FormControl type='password' placeholder='密码' onChange={this.usrPassWDOnChange}>
                     </FormControl>
-                    <br/>
                 </FormGroup>
                 <Button bsStyle='primary' onClick={this.loginButtonOnClick}>
                     {this.state.Name}
