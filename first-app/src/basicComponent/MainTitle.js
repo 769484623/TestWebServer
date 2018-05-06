@@ -6,7 +6,7 @@ export default class MainTitle extends Component {
     constructor(props){
         super(props);
         this.timeUpdateCallBack = this.timeUpdateCallBack.bind(this);
-        const time = new Date().toTimeString().split(' ')[0];
+        const time = new Date().toTimeString().split(' ')[0].slice(0,-3);
         this.state = {currentTime:time};
     }
     componentDidMount(){
@@ -16,7 +16,7 @@ export default class MainTitle extends Component {
         clearInterval(this.timer);
     }
     timeUpdateCallBack() {
-        const time = new Date().toTimeString().split(' ')[0];
+        const time = new Date().toTimeString().split(' ')[0].slice(0,-3);
         this.setState({currentTime: time});
     }
 

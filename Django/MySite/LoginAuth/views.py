@@ -4,4 +4,4 @@ from django.http import HttpResponse
 
 def loginAuthentication(request):
     print(request)
-    return HttpResponse('OK')
+    return HttpResponse("{\"authState\":true,\"userID\": 123456789}")

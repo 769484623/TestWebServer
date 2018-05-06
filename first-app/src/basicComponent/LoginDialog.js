@@ -19,7 +19,7 @@ class LoginDialog extends Component {
         this.loginButtonOnClick = this.loginButtonOnClick.bind(this);
         this.usrNameOnChange = this.usrNameOnChange.bind(this);
         this.usrPassWDOnChange = this.usrPassWDOnChange.bind(this);
-        this.state = {args: 0, warningTags: '',loginState:false};
+        this.state = {args: 0, warningTags: '',loginState:false,userID:null};
     }
 
     usrNameOnChange(usrName) {
@@ -51,16 +51,30 @@ class LoginDialog extends Component {
                         },
                     )
                         .then((response) => {
-                            console.log(response);
-                            this.setState({loginState:true});
+                            try{
+                                const jsonResponse = JSON.parse(JSON.stringify(response.data));
+                                console.log(jsonResponse);
+                                if(jsonResponse['authState'] === true)
+                                {
+                                    this.setState({userID:jsonResponse['userID']});
+                                    this.setState({loginState:true});
+                                }
+                                else
+                                {
+                                    this.setState({warningTags: '用户名或密码错误！' });
+                                }
+                            }
+                            catch (e) {
+                                this.setState({warningTags: '服务器返回值有错误！'});
+                            }
                         })
                         .catch((err) => {
                             try {
-                                this.setState({warningTags: '与服务器连接发生错误！错误码：' + err.response.status.toString()})
+                                this.setState({warningTags: '与服务器连接发生错误！错误码：' + err.response.status.toString()});
                             }
                             catch(e)
                             {
-                                this.setState({warningTags: err.toString()})
+                                this.setState({warningTags: err.toString()});
                             }
                         });
                 }
@@ -81,7 +95,7 @@ class LoginDialog extends Component {
         if(this.state.loginState)
         {
             return (
-                <Redirect to='/home'/>
+                <Redirect to={'/home/' + this.state.userID}/>
             );
         }
         return (
