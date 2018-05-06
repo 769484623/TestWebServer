@@ -1,9 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {MainTitle} from './App';
-import LoginDialog from './basicComponent/LoginDialog'
+import { BrowserRouter } from 'react-router-dom';
+import {App} from './App'
+import PlaceHolder from './basicComponent/PlaceHolder'
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<MainTitle/>, document.getElementById('title'));
-ReactDOM.render(<LoginDialog/>, document.getElementById('login-view'));
+ReactDOM.render((
+        <BrowserRouter>
+            <App/>
+        </BrowserRouter>
+    )
+    , document.getElementById('root'));
+ReactDOM.render(<PlaceHolder otherElementHeight={document.getElementById('root').clientHeight}/>
+    ,document.getElementById('padding')
+);
 registerServiceWorker();
