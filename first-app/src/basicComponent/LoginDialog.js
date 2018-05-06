@@ -10,7 +10,7 @@ class LoginDialog extends Component {
         this.loginButtonOnClick = this.loginButtonOnClick.bind(this);
         this.usrNameOnChange = this.usrNameOnChange.bind(this);
         this.usrPassWDOnChange = this.usrPassWDOnChange.bind(this);
-        this.state = {Name: '登录', args: 0, warningTags: '',loginState:false};
+        this.state = {args: 0, warningTags: '',loginState:false};
     }
 
     usrNameOnChange(usrName) {
@@ -40,11 +40,6 @@ class LoginDialog extends Component {
                             userPassWD: this.state.userPassWD,
                             currentTime: timeStamp
                         },
-                        // {
-                        //     headers: {
-                        //         'X-CSRFToken': 'Test Cookies',
-                        //     }
-                        // }
                     )
                         .then((response) => {
                             console.log(response);
@@ -91,9 +86,7 @@ class LoginDialog extends Component {
                     <FormControl type='password' placeholder='密码' onChange={this.usrPassWDOnChange}>
                     </FormControl>
                 </FormGroup>
-                <Button bsStyle='primary' onClick={this.loginButtonOnClick}>
-                    {this.state.Name}
-                </Button>
+                <Button bsStyle='primary' onClick={this.loginButtonOnClick}>登录</Button>
                 <br/>
                 <span id='error-warning-board' style={{'color': 'red', 'fontSize': '10px'}}>
                     {this.state.warningTags}

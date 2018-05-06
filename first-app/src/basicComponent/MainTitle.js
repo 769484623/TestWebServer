@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import '../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import logo from '../logo2.png';
 import './MainTitle.css';
 
@@ -11,7 +10,6 @@ export class MainTitle extends Component {
         this.state = {currentTime:time};
         setInterval(this.timeUpdateCallBack, 1000);
     }
-
     timeUpdateCallBack() {
         const time = new Date().toTimeString().split(' ')[0];
         this.setState({currentTime: time});
