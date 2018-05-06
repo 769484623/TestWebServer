@@ -3,6 +3,15 @@ import {Button, FormGroup, FormControl} from 'react-bootstrap';
 import axios from 'axios';
 import {Redirect} from 'react-router-dom'
 import logo from '../logo2.png'
+import '../../node_modules/bootstrap/dist/css/bootstrap.min.css'
+
+const loginStyle = {
+    'textAlign': 'center',
+    'width': '50%',
+    'left': '0px',
+    'right': '0px',
+    'margin': 'auto'
+};
 
 class LoginDialog extends Component {
     constructor(props) {
@@ -76,7 +85,7 @@ class LoginDialog extends Component {
             );
         }
         return (
-            <div className='Login-Dialog'>
+            <div style={loginStyle}>
                 <img src={logo} alt='Logo'/>
                 <FormGroup className='formBasicText' role='form'>
                     <br/>
