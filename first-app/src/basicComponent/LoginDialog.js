@@ -98,7 +98,7 @@ class LoginDialog extends Component {
                 <Button bsStyle='primary' onClick={this.loginButtonOnClick}>登录</Button>
                 <br/>
                 <span id='error-warning-board' style={{'color': 'red', 'fontSize': '10px'}}>
-                    {this.state.warningTags}
+                    {this.state.warningTags}&nbsp;
                 </span>
             </div>
         );
