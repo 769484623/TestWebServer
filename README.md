@@ -14,9 +14,11 @@
 - [X] ~~Toast适配~~ 使用Span标签来进行警告与提示
 - [ ] 考虑传输的安全问题(CSRF Not Solved)
 - [X] 实现登陆后的跳转(使用React-Router)
+- [ ] 使用Redux来实现登陆后鉴权信息保存（未鉴权的用户将会被redirect到home）
 - [ ] 实现多页面跳转
 - [ ] 实现较复杂后端逻辑
 - [ ] Nginx未发现静态资源，向后端Django发起请求获得资源
+- [ ] 使用cookies来实现不登录即可访问信息（optional）
 
 
 - 已知问题：
