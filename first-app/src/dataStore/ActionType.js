@@ -1,0 +1,1 @@
+export const SET_USR_STATE = 'SET_USR_STATE';

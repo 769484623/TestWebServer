@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import logo from '../logo2.png';
+import logo from '../Logo.png';
 import './MainTitle.css';
 
 export default class MainTitle extends Component {

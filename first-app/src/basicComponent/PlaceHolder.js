@@ -11,7 +11,7 @@ export default class PlaceHolder extends Component{
         this.onWindowsResize = this.onWindowsResize.bind(this);
     }
     onWindowsResize(){
-        let height = 70;
+        let height = 50;
         if(window.innerHeight > this.otherElementHeight + 100)
         {
             height += window.innerHeight - this.otherElementHeight - 100;

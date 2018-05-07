@@ -2,8 +2,11 @@ import React, {Component} from 'react';
 import {Button, FormGroup, FormControl} from 'react-bootstrap';
 import axios from 'axios';
 import {Redirect} from 'react-router-dom'
-import logo from '../logo2.png'
+import logo from '../Logo.png'
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import * as Action from '../dataStore/Action'
+import {reduxStore} from '../dataStore/ReduxStore'
+
 
 const loginStyle = {
     'textAlign': 'center',
@@ -53,9 +56,10 @@ class LoginDialog extends Component {
                         .then((response) => {
                             try{
                                 const jsonResponse = JSON.parse(JSON.stringify(response.data));
-                                console.log(jsonResponse);
                                 if(jsonResponse['authState'] === true)
                                 {
+                                    reduxStore.dispatch(Action.changeUsrState({userAuth:true,userCookies:jsonResponse['userID'],usrState:{}}));
+                                    console.log(reduxStore.getState());
                                     this.setState({userID:jsonResponse['userID']});
                                     this.setState({loginState:true});
                                 }

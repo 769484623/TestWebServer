@@ -14,7 +14,7 @@
 - [X] ~~Toast适配~~ 使用Span标签来进行警告与提示
 - [ ] 考虑传输的安全问题(CSRF Not Solved)
 - [X] 实现登陆后的跳转(使用React-Router)
-- [ ] 使用Redux来实现登陆后鉴权信息保存（未鉴权的用户将会被redirect到home）
+- [X] 使用Redux来实现登陆后鉴权信息保存（未鉴权的用户将会被redirect到home）
 - [ ] 实现多页面跳转
 - [ ] 实现较复杂后端逻辑
 - [ ] Nginx未发现静态资源，向后端Django发起请求获得资源
@@ -26,4 +26,3 @@
 	2. SecretKey没有特别好的解决方法。
 	3. CSRF 问题没有得到解决。
 	4. 前后端分离，React无法获取Cookies（Nginx直接路由,而非Django生成）。
-	5. React-Router在进行路由后，刷新页面仍然可以看到原先的内容（与预期返回到登录界面不符）

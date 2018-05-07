@@ -1,5 +1,6 @@
 import React,{Component} from'react'
-
+import {Redirect}  from 'react-router-dom'
+import {reduxStore}  from '../dataStore/ReduxStore'
 export class HomeView extends Component{
     constructor(props){
         super(props);
@@ -9,6 +10,10 @@ export class HomeView extends Component{
         }
     }
     render(){
+        if(reduxStore.getState().userAuth === false)
+        {
+            return <Redirect to={'/'}/>
+        }
         return (
             <div style={{'textAlign':'center'}}>
                 <p>Your ID is :{this.params['ID']}</p>

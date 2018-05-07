@@ -1,17 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import {App} from './App'
-import PlaceHolder from './basicComponent/PlaceHolder'
+// import PlaceHolder from './basicComponent/PlaceHolder'
 import registerServiceWorker from './registerServiceWorker';
+import {App} from './App'
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux'
+import {reduxStore} from './dataStore/ReduxStore'
 
 ReactDOM.render((
-        <BrowserRouter>
-            <App/>
-        </BrowserRouter>
+        <Provider store={reduxStore}>
+            <BrowserRouter>
+                <App/>
+            </BrowserRouter>
+        </Provider>
     )
     , document.getElementById('root'));
-ReactDOM.render(<PlaceHolder otherElementHeight={document.getElementById('root').clientHeight}/>
-    ,document.getElementById('padding')
-);
+//
+// ReactDOM.render(<PlaceHolder otherElementHeight={document.getElementById('root').clientHeight}/>
+//     ,document.getElementById('padding')
+// );
 registerServiceWorker();
