@@ -1,6 +1,6 @@
 #React
-./first-app/.idea
-./first-app/build
-./first-app/node_modules
+first-app/.idea
+first-app/build
+first-app/node_modules
 #Djiango
-./Django/.idea
+Django/.idea
