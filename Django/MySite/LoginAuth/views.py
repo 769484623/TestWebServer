@@ -5,3 +5,6 @@ from django.http import HttpResponse
 def loginAuthentication(request):
     print(request)
     return HttpResponse("{\"authState\":true,\"userID\": 123456789}")
+
+def registerUser(request):
+    return HttpResponse("OK")

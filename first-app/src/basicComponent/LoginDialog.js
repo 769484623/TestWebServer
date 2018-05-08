@@ -22,6 +22,7 @@ class LoginDialog extends Component {
         this.loginButtonOnClick = this.loginButtonOnClick.bind(this);
         this.usrNameOnChange = this.usrNameOnChange.bind(this);
         this.usrPassWDOnChange = this.usrPassWDOnChange.bind(this);
+        this.registerButtonClick = this.registerButtonClick.bind(this);
         this.state = {args: 0, warningTags: '',loginState:false,userID:null};
     }
 
@@ -46,7 +47,7 @@ class LoginDialog extends Component {
             if (this.state.userPassWD.length >= 6) {
                 const timeStamp = new Date().getTime();//Get Timestamp
                 try {
-                    axios.post('/Auth',
+                    axios.post('/Auth/Auth',
                         {
                             userName: this.state.usrName,
                             userPassWD: this.state.userPassWD,
@@ -95,6 +96,9 @@ class LoginDialog extends Component {
         }//usrname and passwd can not be null
     }
 
+    registerButtonClick(){
+        window.location.href='/register/reg.html';
+    }
     render() {
         if(this.state.loginState)
         {
@@ -112,9 +116,15 @@ class LoginDialog extends Component {
                     <br/>
                     <FormControl type='password' placeholder='密码' onChange={this.usrPassWDOnChange}>
                     </FormControl>
+                    <br/>
+                    <div style={{marginLeft:'10%',width:'35%',float:'left'}}>
+                        <Button bsStyle={'primary'} onClick={this.loginButtonOnClick} block>登录</Button>
+                    </div>
+                    <div style={{marginRight:'10%',width:'35%',float:'right'}}>
+                        <Button bsStyle={'danger'} onClick={this.registerButtonClick} block>注册</Button>
+                    </div>
                 </FormGroup>
-                <Button bsStyle='primary' onClick={this.loginButtonOnClick}>登录</Button>
-                <br/>
+                <br/><br/>
                 <span id='error-warning-board' style={{'color': 'red', 'fontSize': '10px'}}>
                     {this.state.warningTags}&nbsp;
                 </span>

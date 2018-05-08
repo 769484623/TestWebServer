@@ -1,5 +1,5 @@
 ## TestWebServer
-2018.5.4更新。
+2018.5.8更新。
 
 架构：Nginx + Gunicorn + Django（MySQL），前端使用React + Axios，在Nanopi-Neo上测试。
 
@@ -15,7 +15,7 @@
 - [ ] 考虑传输的安全问题(CSRF Not Solved)
 - [X] 实现登陆后的跳转(使用React-Router)
 - [X] 使用Redux来实现登陆后鉴权信息保存（未鉴权的用户将会被redirect到home）
-- [ ] 实现多页面跳转
+- [X] 实现多页面跳转
 - [ ] 实现较复杂后端逻辑
 - [ ] Nginx未发现静态资源，向后端Django发起请求获得资源
 - [ ] 使用cookies来实现不登录即可访问信息（optional）
@@ -25,4 +25,4 @@
 	1. 实验服务器Nginx 用户为 root（不为默认的www-data），MySQL的django用户权限过大（update这个权限应该进一步限制在固定的表内，而不为全部的库权限）。
 	2. SecretKey没有特别好的解决方法。
 	3. CSRF 问题没有得到解决。
-	4. 前后端分离，React无法获取Cookies（Nginx直接路由,而非Django生成）。
+	4. 前后端分离，React无法获取Cookies（Nginx直接路由,而非Django生成）。(通过向后端发送Get请求一个空的html来实现获取cookies）
