@@ -5,8 +5,7 @@ export const AppReducers = (state,action) => {
     {
         case SET_USR_STATE:
         {
-            let obj = Object.assign({},state,{...action.usrState});
-            return obj;
+            return Object.assign({},state,{...action.usrState});
         }
         default:
         {
