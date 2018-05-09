@@ -7,6 +7,7 @@ import '../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import * as Action from '../dataStore/Action'
 import {reduxStore} from '../dataStore/ReduxStore'
 
+import sha256 from 'crypto-js/sha256';
 
 const loginStyle = {
     'textAlign': 'center',
@@ -36,8 +37,9 @@ class LoginDialog extends Component {
 
     usrPassWDOnChange(usrPassWD) {
         if (usrPassWD.target.value) {
+            let val = usrPassWD.target.value;
             this.setState({
-                userPassWD: usrPassWD.target.value,
+                userPassWD: sha256(val).toString(),
             });
         }
     }
@@ -57,16 +59,19 @@ class LoginDialog extends Component {
                         .then((response) => {
                             try{
                                 const jsonResponse = JSON.parse(JSON.stringify(response.data));
-                                if(jsonResponse['authState'] === true)
+                                if(jsonResponse['authState'] === 0)
                                 {
                                     reduxStore.dispatch(Action.changeUsrState({userAuth:true,userCookies:jsonResponse['userID'],usrState:{}}));
                                     console.log(reduxStore.getState());
                                     this.setState({userID:jsonResponse['userID']});
                                     this.setState({loginState:true});
                                 }
-                                else
+                                else if(jsonResponse['authState'] === 1)
                                 {
                                     this.setState({warningTags: '用户名或密码错误！' });
+                                }
+                                else{
+                                    this.setState({warningTags: '未知返回值' });
                                 }
                             }
                             catch (e) {
@@ -111,10 +116,12 @@ class LoginDialog extends Component {
                 <img src={logo} alt='Logo'/>
                 <FormGroup className='formBasicText' role='form'>
                     <br/>
-                    <FormControl type='text' placeholder='用户名' onChange={this.usrNameOnChange}>
+                    <FormControl type='text' placeholder='用户名' onChange={this.usrNameOnChange}
+                                 onKeyUp={(arg) => {if(arg.keyCode === 13)this.loginButtonOnClick()}}>
                     </FormControl>
                     <br/>
-                    <FormControl type='password' placeholder='密码' onChange={this.usrPassWDOnChange}>
+                    <FormControl type='password' placeholder='密码' onChange={this.usrPassWDOnChange}
+                                 onKeyUp={(arg) => {if(arg.keyCode === 13)this.loginButtonOnClick()}}>
                     </FormControl>
                     <br/>
                     <div style={{marginLeft:'10%',width:'35%',float:'left'}}>
