@@ -1,7 +1,9 @@
+import json
+from random import Random
 from django.http import HttpResponse, HttpResponseRedirect
 from LoginAuth.models import UserInfo
 from django.db.models import ObjectDoesNotExist
-import json
+import django.utils.timezone as timezone
 # Create your views here.
 
 
@@ -43,6 +45,17 @@ def secret_token(request):
     print(request)
     return HttpResponse("")
 
+
+def get_random_str(random_str_length=64):
+    strings = ''
+    chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
+    length = len(chars) - 1
+    random = Random()
+    for i in range(random_str_length):
+        strings += chars[random.randint(0, length)]
+    return strings
+
+
 def valid_register_info(info):
     if info["userName"] == "" or len(info["userPassWD"]) != 64:
         print(info["userName"])
@@ -60,8 +73,13 @@ def register_user(request):
         UserInfo.objects.get(user_name=user_info["userName"])
         register_state['authState'] = RegisterEnum.UserNameDuplication
     except ObjectDoesNotExist:
-        UserInfo.objects.create(user_name=user_info["userName"], user_id=UserInfo.objects.last().user_id + 1,
-                                pass_word=user_info["userPassWD"], user_token='justatest')
+        if UserInfo.objects.last() is None:
+            user_id = 1
+        else:
+            user_id = UserInfo.objects.last().user_id + 1
+        UserInfo.objects.create(user_name=user_info["userName"], user_id=user_id,
+                                pass_word=user_info["userPassWD"], user_token=get_random_str(64),
+                                token_last_modified=timezone.now())
         register_state['authState'] = RegisterEnum.RegisterSuccess
     except KeyError:
         register_state['authState'] = RegisterEnum.BrokenJson

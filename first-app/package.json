@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "ajv": "^6.4.0",
+    "antd": "^3.5.1",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
     "babel-core": "6.26.0",

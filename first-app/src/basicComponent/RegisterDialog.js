@@ -1,6 +1,8 @@
 import React,{Component} from 'react'
-import  {FormControl,FormGroup,Button} from 'react-bootstrap'
-import '../../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import  {FormControl,FormGroup,ControlLabel} from 'react-bootstrap'
+import  {Modal,Button,Form} from 'antd'
+import '../../node_modules/bootstrap/dist/css/bootstrap.css'
+import '../../node_modules/antd/dist/antd.css'
 import axios from "axios/index";
 
 import sha256 from 'crypto-js/sha256';
@@ -18,7 +20,8 @@ export default class RegisterDialog extends Component{
         this.userNameOnChange = this.userNameOnChange.bind(this);
         this.userPassWordOnChange = this.userPassWordOnChange.bind(this);
         this.userConfirmPassWordOnChange = this.userConfirmPassWordOnChange.bind(this);
-        this.state = {userName:'',userPassWD:'',userConfirmPassWD:'',warningTags:''}
+        this.onModalClose = this.onModalClose.bind(this);
+        this.state = {userName:'',userPassWD:'',userConfirmPassWD:'',warningTags:'',regSuccess:false}
     }
     submitButtonOnClicked(){
         if (this.state.userName && this.state.userPassWD)
@@ -41,7 +44,20 @@ export default class RegisterDialog extends Component{
                                     const serverRet = jsonResponse['authState'];
                                     if(serverRet === 0x00)//OK
                                     {
-                                        //Success!
+                                        let modal = Modal.success({
+                                            title: '注册成功！',
+                                            content: (
+                                                <p>注册成功！跳转到登录主页……</p>
+                                            ),
+                                            onOk() {
+                                                window.location.href='/';
+                                            },
+                                        });
+                                        this.Timer = setInterval(() => {
+                                            modal.destroy();
+                                            clearInterval(this.Timer);
+                                            window.location.href='/';
+                                        },4000);
                                     }
                                     else if(serverRet === 0x01)//UserNameDuplication
                                     {
@@ -103,28 +119,33 @@ export default class RegisterDialog extends Component{
             });
         }
     }
+    onModalClose(){
+
+    }
     render(){
         return(
-            <FormGroup style={registerFrom}>
-                <br/>
-                <div style={infoStyle}>注册加入大佬的行列</div>
-                <div style={registerGroup}>
-                    <label style={labelCommon}>用户名</label>
-                    <FormControl style={inputCommon} type="text" onChange={this.userNameOnChange}/>
-                </div>
-                <div style={registerGroup}>
-                    <label style={labelCommon}>密码</label>
-                    <FormControl style={inputCommon} type="password" onChange={this.userPassWordOnChange}/>
-                </div>
-                <div style={registerGroup}>
-                    <label style={labelCommon}>重复密码</label>
-                    <FormControl style={inputCommon} type="password" onChange={this.userConfirmPassWordOnChange}/>
-                </div>
-                <Button onClick={this.submitButtonOnClicked}>注册账户</Button><br/><br/>
-                <span id='error-warning-board' style={{'color': 'red', 'fontSize': '10px'}}>
+            <div style={registerFrom}>
+                <Form>
+                    <br/>
+                    <div style={infoStyle}>注册加入大佬的行列</div>
+                    <div style={registerGroup}>
+                        <ControlLabel style={labelCommon}>用户名</ControlLabel>
+                        <FormControl style={inputCommon} type="text" onChange={this.userNameOnChange}/>
+                    </div>
+                    <div style={registerGroup}>
+                        <ControlLabel style={labelCommon}>密码</ControlLabel>
+                        <FormControl style={inputCommon} type="password" onChange={this.userPassWordOnChange}/>
+                    </div>
+                    <div style={registerGroup}>
+                        <ControlLabel style={labelCommon}>重复密码</ControlLabel>
+                        <FormControl style={inputCommon} type="password" onChange={this.userConfirmPassWordOnChange}/>
+                    </div>
+                    <Button type={'default'} htmlType={'submit'} onClick={this.submitButtonOnClicked}>注册账户</Button><br/><br/>
+                    <span id='error-warning-board' style={{'color': 'red', 'fontSize': '10px'}}>
                     {this.state.warningTags}&nbsp;
                 </span>
-            </FormGroup>
+                </Form>
+            </div>
         );
     }
 }
