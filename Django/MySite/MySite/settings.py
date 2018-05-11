@@ -28,7 +28,8 @@ DEBUG = os.environ.get('DEBUG','off') == 'on'
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS','localhost').split(',')
 
 # Application definition
-CSRF_COOKIE_NAME = "XCSRF-TOKEN"
+
+CSRF_COOKIE_AGE = 300
 
 INSTALLED_APPS = [
     'gunicorn',
@@ -44,7 +45,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -58,6 +59,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.core.context_processors.csrf',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',

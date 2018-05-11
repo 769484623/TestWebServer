@@ -1,17 +1,15 @@
 import React,{Component} from 'react'
-import  {FormControl,FormGroup,ControlLabel} from 'react-bootstrap'
-import  {Modal,Button,Form} from 'antd'
-import '../../node_modules/bootstrap/dist/css/bootstrap.css'
+import  {Modal,Button,Form,Input} from 'antd'
 import '../../node_modules/antd/dist/antd.css'
 import axios from "axios/index";
 
 import sha256 from 'crypto-js/sha256';
+import Cookies from 'universal-cookie';
 
-const registerFrom = {'textAlign':'center', 'minWidth':'800px'};
-const registerGroup = {'height':'60px', 'width':'400px', 'margin': 'auto'};
-const labelCommon = {'float': 'left'};
-const inputCommon = {'width': '300px', 'float': 'right'};
-const infoStyle = {'fontSize':'40px','height':'100px'};
+const cookies = new Cookies();
+const registerFrom = {'textAlign':'center'};
+const registerGroup = {'width':'500px', 'margin': 'auto'};
+const infoStyle = {'fontSize':'40px','textAlign':'center'};
 
 export default class RegisterDialog extends Component{
     constructor(props){
@@ -21,64 +19,84 @@ export default class RegisterDialog extends Component{
         this.userPassWordOnChange = this.userPassWordOnChange.bind(this);
         this.userConfirmPassWordOnChange = this.userConfirmPassWordOnChange.bind(this);
         this.onModalClose = this.onModalClose.bind(this);
+        this.usrInfoSending = this.usrInfoSending.bind(this);
+        this.networkErr = this.networkErr.bind(this);
         this.state = {userName:'',userPassWD:'',userConfirmPassWD:'',warningTags:'',regSuccess:false}
     }
+
+    networkErr(err){
+        try {
+            this.setState({warningTags: '与服务器连接发生错误！错误码：' + err.response.status.toString()});
+        }
+        catch(e)
+        {
+            this.setState({warningTags: err.toString()});
+        }
+    };
+
+    usrInfoSending(timeStamp){
+        axios.post('/Auth/Register',
+            {
+                userName: this.state.userName,
+                userPassWD: this.state.userPassWD,
+                currentTime: timeStamp
+            },
+            {
+                headers:{
+                    'X-CSRFToken':cookies.get('csrftoken')
+                }
+            })
+            .then((response) => {
+                try{
+                    const jsonResponse = JSON.parse(JSON.stringify(response.data));
+                    const serverRet = jsonResponse['authState'];
+                    if(serverRet === 0x00)//OK
+                    {
+                        let modal = Modal.success({
+                            title: '注册成功！',
+                            content: (
+                                <p>注册成功！三秒后跳转到登录主页……</p>
+                            ),
+                            onOk() {
+                                window.location.href='/';
+                            },
+                        });
+                        this.Timer = setInterval(() => {
+                            modal.destroy();
+                            clearInterval(this.Timer);
+                            window.location.href='/';
+                        },4000);
+                    }
+                    else if(serverRet === 0x01)//UserNameDuplication
+                    {
+                        this.setState({warningTags: '用户名已存在！'});
+                    }
+                    else {
+                        this.setState({warningTags: '未知返回值'});
+                    }
+                }
+                catch (e) {
+                    this.setState({warningTags: '服务器返回值有错误！'});
+                }
+            })
+            .catch((err) => {
+                this.networkErr(err)
+            });
+    }
+
     submitButtonOnClicked(){
         if (this.state.userName && this.state.userPassWD)
         {
             if(this.state.userPassWD === this.state.userConfirmPassWD)
             {
                 if (this.state.userPassWD.length >= 6) {
-                    const timeStamp = new Date().getTime();//Get Timestamp
                     try {
-                        axios.post('/Auth/Register',
-                            {
-                                userName: this.state.userName,
-                                userPassWD: this.state.userPassWD,
-                                currentTime: timeStamp
-                            },
-                        )
-                            .then((response) => {
-                                try{
-                                    const jsonResponse = JSON.parse(JSON.stringify(response.data));
-                                    const serverRet = jsonResponse['authState'];
-                                    if(serverRet === 0x00)//OK
-                                    {
-                                        let modal = Modal.success({
-                                            title: '注册成功！',
-                                            content: (
-                                                <p>注册成功！跳转到登录主页……</p>
-                                            ),
-                                            onOk() {
-                                                window.location.href='/';
-                                            },
-                                        });
-                                        this.Timer = setInterval(() => {
-                                            modal.destroy();
-                                            clearInterval(this.Timer);
-                                            window.location.href='/';
-                                        },4000);
-                                    }
-                                    else if(serverRet === 0x01)//UserNameDuplication
-                                    {
-                                        this.setState({warningTags: '用户名已存在！'});
-                                    }
-                                    else {
-                                        this.setState({warningTags: '未知返回值'});
-                                    }
-                                }
-                                catch (e) {
-                                    this.setState({warningTags: '服务器返回值有错误！'});
-                                }
+                        axios.get('/Auth/Register')
+                            .then(()=>{
+                                this.usrInfoSending(new Date().getTime())
                             })
                             .catch((err) => {
-                                try {
-                                    this.setState({warningTags: '与服务器连接发生错误！错误码：' + err.response.status.toString()});
-                                }
-                                catch(e)
-                                {
-                                    this.setState({warningTags: err.toString()});
-                                }
+                                this.networkErr(err);
                             });
                     }
                     catch (e) {
@@ -123,29 +141,35 @@ export default class RegisterDialog extends Component{
 
     }
     render(){
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 7 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
         return(
-            <div style={registerFrom}>
-                <Form>
-                    <br/>
-                    <div style={infoStyle}>注册加入大佬的行列</div>
-                    <div style={registerGroup}>
-                        <ControlLabel style={labelCommon}>用户名</ControlLabel>
-                        <FormControl style={inputCommon} type="text" onChange={this.userNameOnChange}/>
-                    </div>
-                    <div style={registerGroup}>
-                        <ControlLabel style={labelCommon}>密码</ControlLabel>
-                        <FormControl style={inputCommon} type="password" onChange={this.userPassWordOnChange}/>
-                    </div>
-                    <div style={registerGroup}>
-                        <ControlLabel style={labelCommon}>重复密码</ControlLabel>
-                        <FormControl style={inputCommon} type="password" onChange={this.userConfirmPassWordOnChange}/>
-                    </div>
+            <Form style={registerFrom}>
+                <br/>
+                <div style={infoStyle}>注册加入大佬的行列</div>
+                <br/>
+                <div style={registerGroup}>
+                    <Form.Item {...formItemLayout} label={'用户名'}>
+                        <Input type="text" onChange={this.userNameOnChange}/>
+                    </Form.Item>
+                    <Form.Item {...formItemLayout} label={'密码'}>
+                        <Input type="password" onChange={this.userPassWordOnChange}/>
+                    </Form.Item>
+                    <Form.Item {...formItemLayout} label={'重复密码'}>
+                        <Input type="password" onChange={this.userConfirmPassWordOnChange}/>
+                    </Form.Item>
                     <Button type={'default'} htmlType={'submit'} onClick={this.submitButtonOnClicked}>注册账户</Button><br/><br/>
-                    <span id='error-warning-board' style={{'color': 'red', 'fontSize': '10px'}}>
-                    {this.state.warningTags}&nbsp;
-                </span>
-                </Form>
-            </div>
+                    <span style={{'color': 'red', 'fontSize': '10px'}}>{this.state.warningTags}&nbsp;</span>
+                </div>
+            </Form>
         );
     }
 }

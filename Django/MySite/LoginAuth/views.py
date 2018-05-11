@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from LoginAuth.models import UserInfo
 from django.db.models import ObjectDoesNotExist
 import django.utils.timezone as timezone
+from django.views.decorators.csrf import ensure_csrf_cookie
 # Create your views here.
 
 
@@ -19,9 +20,10 @@ class RegisterEnum:
     BrokenJson = 0x02
 
 
+@ensure_csrf_cookie
 def login_authentication(request):
     if request.method != "POST":
-        return HttpResponseRedirect("/")
+        return HttpResponse()
     login_state = {}
     try:
         user_info = json.loads(bytes.decode(request.body))
@@ -40,12 +42,6 @@ def login_authentication(request):
         http_response = HttpResponse(json.dumps(login_state))
     return http_response
 
-
-def secret_token(request):
-    print(request)
-    return HttpResponse("")
-
-
 def get_random_str(random_str_length=64):
     strings = ''
     chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
@@ -62,10 +58,10 @@ def valid_register_info(info):
         print(len(info["userPassWD"]))
         raise KeyError
 
-
+@ensure_csrf_cookie
 def register_user(request):
     if request.method != "POST":
-        return HttpResponseRedirect("/")
+        return HttpResponse()
     register_state = {}
     user_info = json.loads(bytes.decode(request.body))
     try:

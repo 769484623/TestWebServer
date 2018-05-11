@@ -6,8 +6,11 @@ import logo from '../Logo.png'
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import * as Action from '../dataStore/Action'
 import {reduxStore} from '../dataStore/ReduxStore'
-
+import Cookies from 'universal-cookie';
 import sha256 from 'crypto-js/sha256';
+
+
+const cookies = new Cookies();
 
 const loginStyle = {
     'textAlign': 'center',
@@ -18,12 +21,24 @@ const loginStyle = {
 };
 
 class LoginDialog extends Component {
+
+    networkErr(err){
+        try {
+            this.setState({warningTags: '与服务器连接发生错误！错误码：' + err.response.status.toString()});
+        }
+        catch(e)
+        {
+            this.setState({warningTags: err.toString()});
+        }
+    };
+
     constructor(props) {
         super(props);
         this.loginButtonOnClick = this.loginButtonOnClick.bind(this);
         this.usrNameOnChange = this.usrNameOnChange.bind(this);
         this.usrPassWDOnChange = this.usrPassWDOnChange.bind(this);
         this.registerButtonClick = this.registerButtonClick.bind(this);
+        this.networkErr = this.networkErr.bind(this);
         this.state = {args: 0, warningTags: '',loginState:false,userID:null};
     }
 
@@ -35,6 +50,45 @@ class LoginDialog extends Component {
         }
     }
 
+    usrInfoSending(timeStamp){
+        axios.post('/Auth/Auth',
+            {
+                userName: this.state.usrName,
+                userPassWD: this.state.userPassWD,
+                currentTime: timeStamp
+            },
+            {
+                headers:{
+                    'X-CSRFToken':cookies.get('csrftoken')
+                }
+            })
+            .then((response) => {
+                try{
+                    const jsonResponse = JSON.parse(JSON.stringify(response.data));
+                    if(jsonResponse['authState'] === 0)
+                    {
+                        reduxStore.dispatch(Action.changeUsrState({userAuth:true,userCookies:jsonResponse['userID'],usrState:{}}));
+                        console.log(reduxStore.getState());
+                        this.setState({userID:jsonResponse['userID']});
+                        this.setState({loginState:true});
+                    }
+                    else if(jsonResponse['authState'] === 1)
+                    {
+                        this.setState({warningTags: '用户名或密码错误！' });
+                    }
+                    else{
+                        this.setState({warningTags: '未知返回值' });
+                    }
+                }
+                catch (e) {
+                    this.setState({warningTags: '服务器返回值有错误！'});
+                }
+            })
+            .catch((err) => {
+               this.networkErr(err)
+            });
+    }
+
     usrPassWDOnChange(usrPassWD) {
         if (usrPassWD.target.value) {
             let val = usrPassWD.target.value;
@@ -43,54 +97,18 @@ class LoginDialog extends Component {
             });
         }
     }
-
     loginButtonOnClick() {
+
         if (this.state.usrName && this.state.userPassWD) {
             if (this.state.userPassWD.length >= 6) {
-                const timeStamp = new Date().getTime();//Get Timestamp
-                try {
-                    axios.post('/Auth/Auth',
-                        {
-                            userName: this.state.usrName,
-                            userPassWD: this.state.userPassWD,
-                            currentTime: timeStamp
-                        },
-                    )
-                        .then((response) => {
-                            try{
-                                const jsonResponse = JSON.parse(JSON.stringify(response.data));
-                                if(jsonResponse['authState'] === 0)
-                                {
-                                    reduxStore.dispatch(Action.changeUsrState({userAuth:true,userCookies:jsonResponse['userID'],usrState:{}}));
-                                    console.log(reduxStore.getState());
-                                    this.setState({userID:jsonResponse['userID']});
-                                    this.setState({loginState:true});
-                                }
-                                else if(jsonResponse['authState'] === 1)
-                                {
-                                    this.setState({warningTags: '用户名或密码错误！' });
-                                }
-                                else{
-                                    this.setState({warningTags: '未知返回值' });
-                                }
-                            }
-                            catch (e) {
-                                this.setState({warningTags: '服务器返回值有错误！'});
-                            }
-                        })
-                        .catch((err) => {
-                            try {
-                                this.setState({warningTags: '与服务器连接发生错误！错误码：' + err.response.status.toString()});
-                            }
-                            catch(e)
-                            {
-                                this.setState({warningTags: err.toString()});
-                            }
-                        });
-                }
-                catch (e) {
-                    console.log('err');
-                }
+                axios.get('/Auth/Auth')
+                    .then(()=>{
+                        this.usrInfoSending(new Date().getTime())
+                    })
+                    .catch((err) => {
+                        this.networkErr(err)
+                    });
+
             }
             else {
                 this.setState({warningTags: '密码应大于6位'});
@@ -104,6 +122,7 @@ class LoginDialog extends Component {
     registerButtonClick(){
         window.location.href='/register/reg.html';
     }
+
     render() {
         if(this.state.loginState)
         {
