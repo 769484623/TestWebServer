@@ -8,7 +8,7 @@ class UserInfo(models.Model):
     user_name = models.CharField(max_length=30)
     pass_word = models.CharField(max_length=64)
     user_token = models.CharField(max_length=64)
-    token_last_modified = models.DateTimeField()
+    token_last_modified = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return self.user_name

@@ -4,3 +4,6 @@ first-app/build
 first-app/node_modules
 #Djiango
 Django/.idea
+Django/MySite/LoginAuth/migrations/
+!Django/MySite/LoginAuth/migrations/__init__.py
+

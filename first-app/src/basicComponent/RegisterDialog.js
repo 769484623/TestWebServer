@@ -18,7 +18,6 @@ export default class RegisterDialog extends Component{
         this.userNameOnChange = this.userNameOnChange.bind(this);
         this.userPassWordOnChange = this.userPassWordOnChange.bind(this);
         this.userConfirmPassWordOnChange = this.userConfirmPassWordOnChange.bind(this);
-        this.onModalClose = this.onModalClose.bind(this);
         this.usrInfoSending = this.usrInfoSending.bind(this);
         this.networkErr = this.networkErr.bind(this);
         this.state = {userName:'',userPassWD:'',userConfirmPassWD:'',warningTags:'',regSuccess:false}
@@ -136,9 +135,6 @@ export default class RegisterDialog extends Component{
                 userConfirmPassWD: sha256(usrPassWDConfirm.target.value).toString(),
             });
         }
-    }
-    onModalClose(){
-
     }
     render(){
         const formItemLayout = {

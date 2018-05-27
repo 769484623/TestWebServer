@@ -20,9 +20,9 @@
 - [X] 实现较复杂后端逻辑
 - [X] 注册功能进一步完善
 - [ ] Nginx未发现静态资源，向后端Django发起请求获得资源
-- [ ] 使用cookies来实现不登录即可访问信息（optional）
+- [X] 使用cookies来实现不登录即可访问信息（optional）
 - [ ] 完善HomeView，实现一些其他功能
-- [ ] WebPack学习&精简
+- [X] WebPack学习&精简
 
 - 已知问题：
 	1. 实验服务器Nginx 用户为 root（不为默认的www-data），MySQL的django用户权限过大（update这个权限应该进一步限制在固定的表内，而不为全部的库权限）。

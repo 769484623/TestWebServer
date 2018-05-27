@@ -98,17 +98,9 @@ class LoginDialog extends Component {
         }
     }
     loginButtonOnClick() {
-
         if (this.state.usrName && this.state.userPassWD) {
             if (this.state.userPassWD.length >= 6) {
-                axios.get('/Auth/Auth')
-                    .then(()=>{
-                        this.usrInfoSending(new Date().getTime())
-                    })
-                    .catch((err) => {
-                        this.networkErr(err)
-                    });
-
+                this.usrInfoSending(new Date().getTime());
             }
             else {
                 this.setState({warningTags: '密码应大于6位'});
@@ -121,6 +113,37 @@ class LoginDialog extends Component {
 
     registerButtonClick(){
         window.location.href='/register/reg.html';
+    }
+
+    componentDidMount(){
+        axios.get('/Auth/Auth')
+            .catch((err) => {
+                this.networkErr(err)
+            });
+        if(cookies.get('csrftoken'))
+        {
+            axios.post('/Auth/Auth',{},
+                {
+                headers:{
+                    'X-CSRFToken':cookies.get('csrftoken')
+                }
+            })
+                .then((response) => {
+                    try{
+                        const jsonResponse = JSON.parse(JSON.stringify(response.data));
+                        if(jsonResponse['authState'] === 0)
+                        {
+                            reduxStore.dispatch(Action.changeUsrState({userAuth:true,userCookies:jsonResponse['userID'],usrState:{}}));
+                            console.log(reduxStore.getState());
+                            this.setState({userID:jsonResponse['userID']});
+                            this.setState({loginState:true});
+                        }
+                    }
+                    catch (e) {
+                        this.setState({warningTags: '服务器返回值有错误！'});
+                    }
+                });
+        }
     }
 
     render() {
