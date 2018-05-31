@@ -45,6 +45,7 @@ def login_authentication(request):
     if cookies_id != 0:
         login_state['authState'] = AuthEnum.LoginSuccess
         login_state['userID'] = cookies_id
+        print('信息：' + bytes.decode(request.body))
     else:
         try:
             user_info = json.loads(bytes.decode(request.body))
